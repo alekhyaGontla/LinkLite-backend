@@ -14,12 +14,7 @@ import com.linklite.service.UrlService;
 
 @RestController
 @RequestMapping("/api/urls")
-@CrossOrigin(
-        origins = {
-                "http://localhost:5173",
-                "https://linklite.vercel.app"
-        }
-)
+@CrossOrigin(origins = "*")
 public class UrlController {
 
 
@@ -31,18 +26,22 @@ public class UrlController {
     }
 
 
+
     // Create Short URL
     @PostMapping
     public ResponseEntity<UrlResponse> createShortUrl(
             @Valid @RequestBody UrlRequest request) {
 
+
         UrlResponse response =
                 urlService.createShortUrl(request);
+
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
 
 
 
@@ -56,11 +55,14 @@ public class UrlController {
                 urlService.getOriginalUrl(shortCode);
 
 
+
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .header("Location", originalUrl)
                 .build();
+
     }
+
 
 
 
@@ -72,7 +74,9 @@ public class UrlController {
         return ResponseEntity.ok(
                 urlService.getAllUrls()
         );
+
     }
+
 
 
 
@@ -88,7 +92,10 @@ public class UrlController {
         return ResponseEntity.ok(
                 "URL deleted successfully."
         );
+
     }
+
+
 
 
 
@@ -101,6 +108,7 @@ public class UrlController {
         return ResponseEntity.ok(
                 urlService.getAnalytics(shortCode)
         );
+
     }
 
 }
