@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.linklite.entity.Url;
+import com.linklite.entity.User;
 
 @Repository
 public interface UrlRepository extends JpaRepository<Url, Long> {
@@ -17,4 +18,5 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     boolean existsByShortCode(String shortCode);
 
     boolean existsByCustomAlias(String customAlias);
+    
 }

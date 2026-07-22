@@ -12,6 +12,7 @@ import com.linklite.dto.UrlResponse;
 import com.linklite.entity.Url;
 import com.linklite.redis.RedisService;
 import com.linklite.repository.UrlRepository;
+import com.linklite.service.ActivityService;
 import com.linklite.service.UrlService;
 import com.linklite.util.HashGenerator;
 
@@ -31,54 +32,91 @@ public class UrlServiceImpl implements UrlService {
     private RedisService redisService;
 
 
+    // Activity tracking
+    @Autowired
+    private ActivityService activityService;
+
+
 
     @Override
     public UrlResponse createShortUrl(UrlRequest request) {
 
+
         Url url = new Url();
+
 
         url.setOriginalUrl(request.getOriginalUrl());
 
 
+
         // Custom Alias
+
         if (request.getCustomAlias() != null &&
                 !request.getCustomAlias().isBlank()) {
 
 
+
             if (urlRepository.existsByCustomAlias(request.getCustomAlias())) {
+
                 throw new RuntimeException("Alias already exists");
+
             }
 
 
+
             url.setShortCode(request.getCustomAlias());
+
             url.setCustomAlias(request.getCustomAlias());
+
 
 
         } else {
 
 
+
             String code;
 
+
             do {
+
                 code = HashGenerator.generateShortCode();
+
 
             } while (urlRepository.existsByShortCode(code));
 
 
+
             url.setShortCode(code);
+
         }
 
 
+
+
         url.setClickCount(0L);
+
         url.setCreatedAt(LocalDateTime.now());
+
         url.setExpiryDate(request.getExpiryDate());
+
 
 
         Url saved = urlRepository.save(url);
 
 
 
+        // Save activity
+
+        activityService.saveActivity(
+                "CREATE",
+                "Created short URL : " + saved.getShortCode()
+        );
+
+
+
+
         // Save URL in Redis
+
         redisService.saveUrl(
                 saved.getShortCode(),
                 saved.getOriginalUrl()
@@ -87,7 +125,11 @@ public class UrlServiceImpl implements UrlService {
 
 
         return convertToResponse(saved);
+
     }
+
+
+
 
 
 
@@ -96,11 +138,15 @@ public class UrlServiceImpl implements UrlService {
     public String getOriginalUrl(String shortCode) {
 
 
+
         // Check Redis first
+
         String cachedUrl = redisService.getUrl(shortCode);
 
 
+
         if (cachedUrl != null) {
+
 
 
             Url url = urlRepository.findByShortCode(shortCode)
@@ -109,11 +155,17 @@ public class UrlServiceImpl implements UrlService {
                     );
 
 
+
             updateAnalytics(url);
 
 
+
             return cachedUrl;
+
         }
+
+
+
 
 
 
@@ -124,13 +176,20 @@ public class UrlServiceImpl implements UrlService {
 
 
 
-        // Check expiry
+
+
+        // Expiry check
 
         if (url.getExpiryDate() != null &&
                 url.getExpiryDate().isBefore(LocalDateTime.now())) {
 
+
             throw new RuntimeException("URL Expired");
+
         }
+
+
+
 
 
 
@@ -138,7 +197,9 @@ public class UrlServiceImpl implements UrlService {
 
 
 
-        // Save in Redis
+
+
+        // Save to Redis
 
         redisService.saveUrl(
                 shortCode,
@@ -148,7 +209,10 @@ public class UrlServiceImpl implements UrlService {
 
 
         return url.getOriginalUrl();
+
     }
+
+
 
 
 
@@ -157,9 +221,11 @@ public class UrlServiceImpl implements UrlService {
     private void updateAnalytics(Url url) {
 
 
+
         url.setClickCount(
                 url.getClickCount() + 1
         );
+
 
 
         url.setLastAccessed(
@@ -167,7 +233,20 @@ public class UrlServiceImpl implements UrlService {
         );
 
 
+
         urlRepository.save(url);
+
+
+
+
+
+        // Activity log
+
+        activityService.saveActivity(
+                "CLICK",
+                "Opened short URL : " + url.getShortCode()
+        );
+
 
     }
 
@@ -175,8 +254,13 @@ public class UrlServiceImpl implements UrlService {
 
 
 
+
+
+
+
     @Override
     public List<UrlResponse> getAllUrls() {
+
 
 
         return urlRepository.findAll()
@@ -190,14 +274,27 @@ public class UrlServiceImpl implements UrlService {
 
 
 
+
+
+
+
     @Override
     public UrlResponse getAnalytics(String shortCode) {
+
 
 
         Url url = urlRepository.findByShortCode(shortCode)
                 .orElseThrow(() ->
                         new RuntimeException("URL Not Found")
                 );
+
+
+
+        activityService.saveActivity(
+                "ANALYTICS",
+                "Viewed analytics for : " + shortCode
+        );
+
 
 
         return convertToResponse(url);
@@ -208,17 +305,26 @@ public class UrlServiceImpl implements UrlService {
 
 
 
+
+
+
+
     private UrlResponse convertToResponse(Url url) {
+
 
 
         UrlResponse response = new UrlResponse();
 
 
+
         response.setId(url.getId());
+
+
 
         response.setOriginalUrl(
                 url.getOriginalUrl()
         );
+
 
 
         response.setShortCode(
@@ -226,9 +332,11 @@ public class UrlServiceImpl implements UrlService {
         );
 
 
+
         response.setShortUrl(
                 baseUrl + "/api/urls/" + url.getShortCode()
         );
+
 
 
         response.setCustomAlias(
@@ -236,9 +344,11 @@ public class UrlServiceImpl implements UrlService {
         );
 
 
+
         response.setClickCount(
                 url.getClickCount()
         );
+
 
 
         response.setCreatedAt(
@@ -246,14 +356,17 @@ public class UrlServiceImpl implements UrlService {
         );
 
 
+
         response.setLastAccessed(
                 url.getLastAccessed()
         );
 
 
+
         response.setExpiryDate(
                 url.getExpiryDate()
         );
+
 
 
         return response;
@@ -264,14 +377,21 @@ public class UrlServiceImpl implements UrlService {
 
 
 
+
+
+
+
     @Override
     public void deleteUrl(Long id) {
+
 
 
         Url url = urlRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("URL Not Found")
                 );
+
+
 
 
 
@@ -283,10 +403,25 @@ public class UrlServiceImpl implements UrlService {
 
 
 
-        // Delete database record
+
+
+        // Delete database
 
         urlRepository.delete(url);
 
+
+
+
+
+        // Activity log
+
+        activityService.saveActivity(
+                "DELETE",
+                "Deleted short URL : " + url.getShortCode()
+        );
+
+
     }
+
 
 }
