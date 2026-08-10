@@ -14,7 +14,7 @@ import com.linklite.service.UrlService;
 
 @RestController
 @RequestMapping("/api/urls")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UrlController {
 
 
