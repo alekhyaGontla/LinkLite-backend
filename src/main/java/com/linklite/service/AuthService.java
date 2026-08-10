@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import com.linklite.dto.LoginRequest;
 import com.linklite.dto.RegisterRequest;
 import com.linklite.entity.User;
-import com.linklite.exception.InvalidCredentialsException;
-import com.linklite.exception.UserNotFoundException;
 import com.linklite.repository.UserRepository;
 
 @Service
@@ -35,10 +33,10 @@ public class AuthService {
     public String login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
+                .orElseThrow(() -> new RuntimeException("User Not Found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException("Invalid Password");
+            throw new RuntimeException("Invalid Password");
         }
 
         return "Login Successful";
