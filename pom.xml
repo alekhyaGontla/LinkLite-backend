@@ -110,7 +110,6 @@
                     </path>
                 </annotationProcessorPaths>
             </configuration>
-
         </plugin>
 
     </plugins>
