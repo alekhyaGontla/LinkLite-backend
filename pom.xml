@@ -4,6 +4,10 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+<<<<<<< HEAD
+=======
+```
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 <modelVersion>4.0.0</modelVersion>
 
 <!-- Spring Boot Parent -->
@@ -18,6 +22,7 @@
 <groupId>com.linklite</groupId>
 <artifactId>linklite</artifactId>
 <version>0.0.1-SNAPSHOT</version>
+<<<<<<< HEAD
 
 <name>linklite</name>
 <description>LinkLite URL Shortener</description>
@@ -25,33 +30,48 @@
 <!-- Java -->
 <properties>
     <java.version>21</java.version>
+=======
+<name>linklite</name>
+<description>LinkLite URL Shortener</description>
+
+<!-- Java Version -->
+<properties>
+    <java.version>17</java.version>
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 </properties>
 
 <dependencies>
 
+<<<<<<< HEAD
     <!-- Spring Web -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-webmvc</artifactId>
     </dependency>
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <!-- Spring Data JPA -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
+<<<<<<< HEAD
     <!-- Spring Security -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <!-- Redis -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
+<<<<<<< HEAD
     <!-- Testing: JUnit 5 + Mockito + Spring Boot Test -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -63,12 +83,24 @@
     <artifactId>h2</artifactId>
     <scope>test</scope>
 </dependency>
+=======
+
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <!-- Validation -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
+<<<<<<< HEAD
+=======
+    <!-- Spring Web MVC -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <!-- PostgreSQL -->
     <dependency>
         <groupId>org.postgresql</groupId>
@@ -76,6 +108,7 @@
         <scope>runtime</scope>
     </dependency>
 
+<<<<<<< HEAD
     <!-- Swagger / OpenAPI -->
     <dependency>
         <groupId>org.springdoc</groupId>
@@ -83,6 +116,8 @@
         <version>2.8.9</version>
     </dependency>
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <!-- Lombok -->
     <dependency>
         <groupId>org.projectlombok</groupId>
@@ -91,7 +126,11 @@
         <scope>provided</scope>
     </dependency>
 
+<<<<<<< HEAD
     <!-- DevTools -->
+=======
+    <!-- Spring Boot DevTools -->
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
@@ -119,14 +158,21 @@
             </configuration>
         </plugin>
 
+<<<<<<< HEAD
         <!-- Maven Compiler -->
+=======
+        <!-- Maven Compiler Plugin -->
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
 
             <configuration>
+<<<<<<< HEAD
                 <release>21</release>
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
                 <annotationProcessorPaths>
                     <path>
                         <groupId>org.projectlombok</groupId>
@@ -134,11 +180,18 @@
                         <version>1.18.36</version>
                     </path>
                 </annotationProcessorPaths>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
             </configuration>
         </plugin>
 
     </plugins>
 </build>
+<<<<<<< HEAD
+=======
+```
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 
 </project>

@@ -1,9 +1,19 @@
 package com.linklite.entity;
 
 import jakarta.persistence.*;
+<<<<<<< HEAD
 
 @Entity
 @Table(name = "users")
+=======
+import lombok.*;
+
+@Entity
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 public class User {
 
     @Id
@@ -13,11 +23,16 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+<<<<<<< HEAD
     @Column(nullable = false, unique = true)
+=======
+    @Column(unique = true, nullable = false)
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     private String email;
 
     @Column(nullable = false)
     private String password;
+<<<<<<< HEAD
 
     public User() {
     }
@@ -53,4 +68,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 }

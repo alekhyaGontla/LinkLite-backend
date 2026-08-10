@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 package com.linklite;
 
@@ -10,28 +11,49 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+=======
+package com.linklite;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDateTime;
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+<<<<<<< HEAD
 import org.springframework.test.util.ReflectionTestUtils;
 
+=======
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 import com.linklite.dto.UrlRequest;
 import com.linklite.dto.UrlResponse;
 import com.linklite.entity.Url;
 import com.linklite.redis.RedisService;
 import com.linklite.repository.UrlRepository;
+<<<<<<< HEAD
 import com.linklite.service.ActivityService;
 import com.linklite.serviceImpl.UrlServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class UrlServiceImplTest {
+=======
+import com.linklite.serviceImpl.UrlServiceImpl;
+
+@ExtendWith(MockitoExtension.class)
+public class UrlServiceImplTest {
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 
     @Mock
     private UrlRepository urlRepository;
@@ -39,6 +61,7 @@ class UrlServiceImplTest {
     @Mock
     private RedisService redisService;
 
+<<<<<<< HEAD
     @Mock
     private ActivityService activityService;
 
@@ -52,12 +75,31 @@ class UrlServiceImplTest {
                 "baseUrl",
                 "http://localhost:8080"
         );
+=======
+    @InjectMocks
+    private UrlServiceImpl urlService;
+
+    private Url url;
+
+    @BeforeEach
+    void setup() {
+
+        url = new Url();
+
+        url.setId(1L);
+        url.setOriginalUrl("https://www.google.com");
+        url.setShortCode("google");
+        url.setCustomAlias("google");
+        url.setClickCount(0L);
+        url.setCreatedAt(LocalDateTime.now());
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     }
 
     @Test
     void testCreateShortUrl() {
 
         UrlRequest request = new UrlRequest();
+<<<<<<< HEAD
         request.setOriginalUrl("https://google.com");
 
         Url savedUrl = new Url();
@@ -100,11 +142,31 @@ class UrlServiceImplTest {
                         eq("CREATE"),
                         anyString()
                 );
+=======
+
+        request.setOriginalUrl("https://www.google.com");
+        request.setCustomAlias("google");
+
+        when(urlRepository.existsByCustomAlias("google"))
+                .thenReturn(false);
+
+        when(urlRepository.save(any(Url.class)))
+                .thenReturn(url);
+
+        UrlResponse response = urlService.createShortUrl(request);
+
+        assertNotNull(response);
+        assertEquals("google", response.getShortCode());
+        assertEquals("https://www.google.com", response.getOriginalUrl());
+
+        verify(urlRepository, times(1)).save(any(Url.class));
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     }
 
     @Test
     void testGetOriginalUrl() {
 
+<<<<<<< HEAD
         String shortCode = "abc123";
 
         Url url = new Url();
@@ -144,11 +206,23 @@ class UrlServiceImplTest {
                         eq("CLICK"),
                         anyString()
                 );
+=======
+        when(redisService.getUrl("google"))
+                .thenReturn(null);
+
+        when(urlRepository.findByShortCode("google"))
+                .thenReturn(Optional.of(url));
+
+        String original = urlService.getOriginalUrl("google");
+
+        assertEquals("https://www.google.com", original);
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
     }
 
     @Test
     void testDeleteUrl() {
 
+<<<<<<< HEAD
         Long id = 1L;
 
         Url url = new Url();
@@ -186,4 +260,45 @@ class UrlServiceImplTest {
                         anyString()
                 );
     }
+=======
+        when(urlRepository.findById(1L))
+                .thenReturn(Optional.of(url));
+
+        urlService.deleteUrl(1L);
+
+        verify(urlRepository).delete(url);
+    }
+    
+    @Test
+    void testAliasAlreadyExists() {
+
+        UrlRequest request = new UrlRequest();
+
+        request.setOriginalUrl("https://www.google.com");
+        request.setCustomAlias("google");
+
+        when(urlRepository.existsByCustomAlias("google"))
+                .thenReturn(true);
+
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> urlService.createShortUrl(request));
+
+        assertEquals("Alias already exists", exception.getMessage());
+    }
+    
+    @Test
+    void testUrlNotFound() {
+
+        when(redisService.getUrl("xyz"))
+                .thenReturn(null);
+
+        when(urlRepository.findByShortCode("xyz"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,
+                () -> urlService.getOriginalUrl("xyz"));
+    }
+    
+>>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
 }
