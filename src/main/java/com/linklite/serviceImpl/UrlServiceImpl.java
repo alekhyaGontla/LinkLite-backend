@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import com.linklite.dto.UrlRequest;
 import com.linklite.dto.UrlResponse;
 import com.linklite.entity.Url;
+import com.linklite.exception.DuplicateAliasException;
+import com.linklite.exception.UrlExpiredException;
+import com.linklite.exception.UrlNotFoundException;
 import com.linklite.redis.RedisService;
 import com.linklite.repository.UrlRepository;
 import com.linklite.service.ActivityService;
@@ -58,7 +61,7 @@ public class UrlServiceImpl implements UrlService {
 
             if (urlRepository.existsByCustomAlias(request.getCustomAlias())) {
 
-                throw new RuntimeException("Alias already exists");
+                throw new DuplicateAliasException("Alias already exists");
 
             }
 
@@ -151,7 +154,7 @@ public class UrlServiceImpl implements UrlService {
 
             Url url = urlRepository.findByShortCode(shortCode)
                     .orElseThrow(() ->
-                            new RuntimeException("URL Not Found")
+                            new UrlNotFoundException("URL Not Found")
                     );
 
 
@@ -171,7 +174,7 @@ public class UrlServiceImpl implements UrlService {
 
         Url url = urlRepository.findByShortCode(shortCode)
                 .orElseThrow(() ->
-                        new RuntimeException("URL Not Found")
+                        new UrlNotFoundException("URL Not Found")
                 );
 
 
@@ -184,7 +187,7 @@ public class UrlServiceImpl implements UrlService {
                 url.getExpiryDate().isBefore(LocalDateTime.now())) {
 
 
-            throw new RuntimeException("URL Expired");
+            throw new UrlExpiredException("URL Expired");
 
         }
 
@@ -285,7 +288,7 @@ public class UrlServiceImpl implements UrlService {
 
         Url url = urlRepository.findByShortCode(shortCode)
                 .orElseThrow(() ->
-                        new RuntimeException("URL Not Found")
+                        new UrlNotFoundException("URL Not Found")
                 );
 
 
@@ -388,7 +391,7 @@ public class UrlServiceImpl implements UrlService {
 
         Url url = urlRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("URL Not Found")
+                        new UrlNotFoundException("URL Not Found")
                 );
 
 
