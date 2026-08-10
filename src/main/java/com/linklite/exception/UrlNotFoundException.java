@@ -1,7 +1,7 @@
 package com.linklite.exception;
 
-public class UrlNotFoundException extends RuntimeException {
-    public UrlNotFoundException(String message) {
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
         super(message);
     }
 }
