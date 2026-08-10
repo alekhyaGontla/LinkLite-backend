@@ -1,5 +1,7 @@
 package com.linklite.exception;
 
-public class DuplicateAliasException {
-
+public class DuplicateAliasException extends RuntimeException {
+    public DuplicateAliasException(String message) {
+        super(message);
+    }
 }
