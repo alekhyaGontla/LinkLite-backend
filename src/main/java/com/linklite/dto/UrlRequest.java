@@ -2,21 +2,38 @@ package com.linklite.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import lombok.Data;
-
-@Data
 public class UrlRequest {
 
-    @NotBlank(message = "Original URL is required")
-    @Pattern(
-        regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
-        message = "Please enter a valid URL"
-    )
-    private String originalUrl;
+```
+private String originalUrl;
 
-    private String customAlias;
+private String customAlias;
 
-    private LocalDateTime expiryDate;
+private LocalDateTime expiryDate;
+
+public String getOriginalUrl() {
+    return originalUrl;
+}
+
+public void setOriginalUrl(String originalUrl) {
+    this.originalUrl = originalUrl;
+}
+
+public String getCustomAlias() {
+    return customAlias;
+}
+
+public void setCustomAlias(String customAlias) {
+    this.customAlias = customAlias;
+}
+
+public LocalDateTime getExpiryDate() {
+    return expiryDate;
+}
+
+public void setExpiryDate(LocalDateTime expiryDate) {
+    this.expiryDate = expiryDate;
+}
+```
+
 }
