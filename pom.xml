@@ -1,197 +1,155 @@
+
+Those **cannot be inside `pom.xml`**, which is why Render's Maven parser fails.
+
+Since your local machine is using **Java 21** and your previous `mvn clean package` succeeded, I recommend keeping the Java 21 configuration.
+
+Replace the **entire contents** of your `pom.xml` with this clean version:
+
+:::writing{variant="document" id="58321"}
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-<<<<<<< HEAD
-=======
-```
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-<!-- Spring Boot Parent -->
-<parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.1.0</version>
-    <relativePath/>
-</parent>
-
-<!-- Project Information -->
-<groupId>com.linklite</groupId>
-<artifactId>linklite</artifactId>
-<version>0.0.1-SNAPSHOT</version>
-<<<<<<< HEAD
-
-<name>linklite</name>
-<description>LinkLite URL Shortener</description>
-
-<!-- Java -->
-<properties>
-    <java.version>21</java.version>
-=======
-<name>linklite</name>
-<description>LinkLite URL Shortener</description>
-
-<!-- Java Version -->
-<properties>
-    <java.version>17</java.version>
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-</properties>
-
-<dependencies>
-
-<<<<<<< HEAD
-    <!-- Spring Web -->
-    <dependency>
+    <!-- Spring Boot Parent -->
+    <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-webmvc</artifactId>
-    </dependency>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/>
+    </parent>
 
-=======
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <!-- Spring Data JPA -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
+    <!-- Project Information -->
+    <groupId>com.linklite</groupId>
+    <artifactId>linklite</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>linklite</name>
+    <description>LinkLite URL Shortener</description>
 
-<<<<<<< HEAD
-    <!-- Spring Security -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
+    <!-- Java -->
+    <properties>
+        <java.version>21</java.version>
+    </properties>
 
-=======
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <!-- Redis -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-<<<<<<< HEAD
-    <!-- Testing: JUnit 5 + Mockito + Spring Boot Test -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-test</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <scope>test</scope>
-</dependency>
-=======
+    <dependencies>
 
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <!-- Validation -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
-    </dependency>
-
-<<<<<<< HEAD
-=======
-    <!-- Spring Web MVC -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-webmvc</artifactId>
-    </dependency>
-
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <!-- PostgreSQL -->
-    <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-
-<<<<<<< HEAD
-    <!-- Swagger / OpenAPI -->
-    <dependency>
-        <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>2.8.9</version>
-    </dependency>
-
-=======
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <!-- Lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.36</version>
-        <scope>provided</scope>
-    </dependency>
-
-<<<<<<< HEAD
-    <!-- DevTools -->
-=======
-    <!-- Spring Boot DevTools -->
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-devtools</artifactId>
-        <scope>runtime</scope>
-        <optional>true</optional>
-    </dependency>
-
-</dependencies>
-
-<build>
-    <plugins>
-
-        <!-- Spring Boot Maven Plugin -->
-        <plugin>
+        <!-- Spring Web MVC -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
 
-            <configuration>
-                <excludes>
-                    <exclude>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                    </exclude>
-                </excludes>
-            </configuration>
-        </plugin>
+        <!-- Spring Data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 
-<<<<<<< HEAD
-        <!-- Maven Compiler -->
-=======
-        <!-- Maven Compiler Plugin -->
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
-            <configuration>
-<<<<<<< HEAD
-                <release>21</release>
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 
-=======
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-                <annotationProcessorPaths>
-                    <path>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>1.18.36</version>
-                    </path>
-                </annotationProcessorPaths>
-<<<<<<< HEAD
+        <!-- Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
 
-=======
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
-            </configuration>
-        </plugin>
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
-    </plugins>
-</build>
-<<<<<<< HEAD
-=======
-```
->>>>>>> 07dc98d6affa2ec4f698256083be4284d7bddb38
+        <!-- Swagger / OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.9</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spring Boot DevTools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- H2 for Tests -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Spring Boot Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+                    <release>21</release>
+
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.36</version>
+                        </path>
+                    </annotationProcessorPaths>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
