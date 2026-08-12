@@ -7,15 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @Configuration
 public class DatabaseConfig {
 
-    // Accepts either scheme, e.g.:
-    // postgres://user:pass@host:5432/dbname
-    // postgresql://user:pass@host:5432/dbname
     @Value("${DATABASE_URL:}")
     private String databaseUrl;
 
@@ -27,42 +22,31 @@ public class DatabaseConfig {
 
     @Bean
     @Primary
-    public DataSource dataSource() throws URISyntaxException {
-        boolean hasDatabaseUrl = !databaseUrl.isEmpty()
-                && (databaseUrl.startsWith("postgres://") || databaseUrl.startsWith("postgresql://"));
+    public DataSource dataSource() {
 
-        // Local development fallback if DATABASE_URL isn't set
-        if (!hasDatabaseUrl) {
-            return DataSourceBuilder.create()
-                    .driverClassName("org.postgresql.Driver")
-                    .url("jdbc:postgresql://localhost:5432/postgres")
-                    .username(defaultUsername)
-                    .password(defaultPassword)
-                    .build();
+        if (databaseUrl == null || databaseUrl.isBlank()) {
+            throw new IllegalStateException(
+                "DATABASE_URL environment variable is not configured"
+            );
         }
 
-        // Parse a raw postgres:// or postgresql:// URL (Render, Supabase, etc.)
-        URI dbUri = new URI(databaseUrl);
+        String jdbcUrl = databaseUrl;
 
-        String[] userInfo = dbUri.getUserInfo().split(":", 2);
-        String username = userInfo[0];
-        String password = userInfo.length > 1 ? userInfo[1] : "";
+        // Convert Render/Supabase postgres:// URL to JDBC format
+        if (jdbcUrl.startsWith("postgres://")) {
+            jdbcUrl = "jdbc:" + jdbcUrl;
+        } else if (jdbcUrl.startsWith("postgresql://")) {
+            jdbcUrl = "jdbc:" + jdbcUrl;
+        }
 
-        int port = dbUri.getPort() == -1 ? 5432 : dbUri.getPort();
-        String dbPath = dbUri.getPath(); // includes leading '/'
-
-        String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbPath;
-
-        // Preserve any query params (e.g. sslmode=require); default to
-        // requiring SSL for non-local hosts, since Supabase/Render enforce it.
-        String query = dbUri.getQuery();
-        jdbcUrl += (query != null && !query.isEmpty()) ? "?" + query : "?sslmode=require";
+        // Add SSL if not already specified
+        if (!jdbcUrl.contains("?")) {
+            jdbcUrl += "?sslmode=require";
+        }
 
         return DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
                 .url(jdbcUrl)
-                .username(username)
-                .password(password)
                 .build();
     }
 }
