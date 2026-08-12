@@ -26,20 +26,23 @@ public class DatabaseConfig {
 
         if (databaseUrl == null || databaseUrl.isBlank()) {
             throw new IllegalStateException(
-                "DATABASE_URL environment variable is not configured"
+                    "DATABASE_URL environment variable is not configured"
             );
         }
 
-        String jdbcUrl = databaseUrl;
+        String jdbcUrl = databaseUrl.trim();
 
-        // Convert Render/Supabase postgres:// URL to JDBC format
+        // Convert postgres:// URL to JDBC format
         if (jdbcUrl.startsWith("postgres://")) {
-            jdbcUrl = "jdbc:" + jdbcUrl;
+            jdbcUrl = "jdbc:postgresql://" +
+                    jdbcUrl.substring("postgres://".length());
+
         } else if (jdbcUrl.startsWith("postgresql://")) {
-            jdbcUrl = "jdbc:" + jdbcUrl;
+            jdbcUrl = "jdbc:postgresql://" +
+                    jdbcUrl.substring("postgresql://".length());
         }
 
-        // Add SSL if not already specified
+        // Add SSL for Supabase
         if (!jdbcUrl.contains("?")) {
             jdbcUrl += "?sslmode=require";
         }
@@ -47,6 +50,8 @@ public class DatabaseConfig {
         return DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
                 .url(jdbcUrl)
+                .username(defaultUsername)
+                .password(defaultPassword)
                 .build();
     }
 }
