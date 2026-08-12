@@ -32,7 +32,6 @@ public class DatabaseConfig {
 
         String jdbcUrl = databaseUrl.trim();
 
-        // Convert PostgreSQL URLs to JDBC format
         if (jdbcUrl.startsWith("postgres://")) {
             jdbcUrl = "jdbc:postgresql://"
                     + jdbcUrl.substring("postgres://".length());
@@ -40,23 +39,17 @@ public class DatabaseConfig {
         } else if (jdbcUrl.startsWith("postgresql://")) {
             jdbcUrl = "jdbc:postgresql://"
                     + jdbcUrl.substring("postgresql://".length());
+        }
 
-        } else if (!jdbcUrl.startsWith("jdbc:postgresql://")) {
+        if (!jdbcUrl.startsWith("jdbc:postgresql://")) {
             throw new IllegalArgumentException(
-                    "Invalid DATABASE_URL. Expected PostgreSQL JDBC URL."
+                    "DATABASE_URL must be a PostgreSQL JDBC URL"
             );
         }
 
-        // Add SSL for Supabase when not already specified
         if (!jdbcUrl.contains("?")) {
             jdbcUrl += "?sslmode=require";
         }
-
-        System.out.println("Connecting to PostgreSQL: "
-                + jdbcUrl.replaceAll(
-                        "(?i)(://)([^:@]+):([^@]+)@",
-                        "$1$2:****@"
-                ));
 
         return DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
