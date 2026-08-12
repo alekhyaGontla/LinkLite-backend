@@ -14,11 +14,11 @@ public class DatabaseConfig {
     @Value("${DATABASE_URL:}")
     private String databaseUrl;
 
-    @Value("${spring.datasource.username:postgres}")
-    private String defaultUsername;
+    @Value("${DB_USERNAME:postgres}")
+    private String username;
 
-    @Value("${spring.datasource.password:}")
-    private String defaultPassword;
+    @Value("${DB_PASSWORD:}")
+    private String password;
 
     @Bean
     @Primary
@@ -32,26 +32,37 @@ public class DatabaseConfig {
 
         String jdbcUrl = databaseUrl.trim();
 
-        // Convert postgres:// URL to JDBC format
+        // Convert PostgreSQL URLs to JDBC format
         if (jdbcUrl.startsWith("postgres://")) {
-            jdbcUrl = "jdbc:postgresql://" +
-                    jdbcUrl.substring("postgres://".length());
+            jdbcUrl = "jdbc:postgresql://"
+                    + jdbcUrl.substring("postgres://".length());
 
         } else if (jdbcUrl.startsWith("postgresql://")) {
-            jdbcUrl = "jdbc:postgresql://" +
-                    jdbcUrl.substring("postgresql://".length());
+            jdbcUrl = "jdbc:postgresql://"
+                    + jdbcUrl.substring("postgresql://".length());
+
+        } else if (!jdbcUrl.startsWith("jdbc:postgresql://")) {
+            throw new IllegalArgumentException(
+                    "Invalid DATABASE_URL. Expected PostgreSQL JDBC URL."
+            );
         }
 
-        // Add SSL for Supabase
+        // Add SSL for Supabase when not already specified
         if (!jdbcUrl.contains("?")) {
             jdbcUrl += "?sslmode=require";
         }
 
+        System.out.println("Connecting to PostgreSQL: "
+                + jdbcUrl.replaceAll(
+                        "(?i)(://)([^:@]+):([^@]+)@",
+                        "$1$2:****@"
+                ));
+
         return DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
                 .url(jdbcUrl)
-                .username(defaultUsername)
-                .password(defaultPassword)
+                .username(username)
+                .password(password)
                 .build();
     }
 }
