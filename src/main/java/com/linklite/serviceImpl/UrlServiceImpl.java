@@ -49,12 +49,19 @@ public class UrlServiceImpl implements UrlService {
         if (request.getCustomAlias() != null
                 && !request.getCustomAlias().isBlank()) {
 
-            if (urlRepository.existsByCustomAlias(request.getCustomAlias())) {
+            String alias = request.getCustomAlias();
+
+            // Check against BOTH custom aliases and auto-generated short
+            // codes - shortCode has a unique DB constraint, so a collision
+            // there would previously blow up as a raw 500 instead of this
+            // friendly error.
+            if (urlRepository.existsByCustomAlias(alias)
+                    || urlRepository.existsByShortCode(alias)) {
                 throw new DuplicateAliasException("Alias already exists");
             }
 
-            url.setShortCode(request.getCustomAlias());
-            url.setCustomAlias(request.getCustomAlias());
+            url.setShortCode(alias);
+            url.setCustomAlias(alias);
 
         } else {
 
